@@ -14,6 +14,9 @@ public:
     ChatWindow(QWidget *parent = nullptr);
     ~ChatWindow();
 
+private slots:
+    void on_sendBtn_clicked();
+
 private:
     Ui::ChatWindow *ui;
 };
