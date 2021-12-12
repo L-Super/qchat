@@ -1,5 +1,31 @@
 <RCC>
     <qresource prefix="/">
         <file>resource/QssStyle.css</file>
+        <file>resource/img/img-black/close.png</file>
+        <file>resource/img/img-black/download.png</file>
+        <file>resource/img/img-black/error.png</file>
+        <file>resource/img/img-black/folder-close.png</file>
+        <file>resource/img/img-black/history.png</file>
+        <file>resource/img/img-black/picture.png</file>
+        <file>resource/img/img-black/play.png</file>
+        <file>resource/img/img-black/refresh.png</file>
+        <file>resource/img/img-black/save.png</file>
+        <file>resource/img/img-black/search.png</file>
+        <file>resource/img/img-black/send.png</file>
+        <file>resource/img/img-black/setting.png</file>
+        <file>resource/img/img-black/warning.png</file>
+        <file>resource/img/img-grey/close.png</file>
+        <file>resource/img/img-grey/download.png</file>
+        <file>resource/img/img-grey/error.png</file>
+        <file>resource/img/img-grey/folder-close.png</file>
+        <file>resource/img/img-grey/history.png</file>
+        <file>resource/img/img-grey/picture.png</file>
+        <file>resource/img/img-grey/play.png</file>
+        <file>resource/img/img-grey/refresh.png</file>
+        <file>resource/img/img-grey/save.png</file>
+        <file>resource/img/img-grey/search.png</file>
+        <file>resource/img/img-grey/send.png</file>
+        <file>resource/img/img-grey/setting.png</file>
+        <file>resource/img/img-grey/warning.png</file>
     </qresource>
 </RCC>

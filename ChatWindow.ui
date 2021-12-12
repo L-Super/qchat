@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>911</width>
-    <height>611</height>
+    <width>970</width>
+    <height>600</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -85,6 +85,10 @@
             <property name="text">
              <string>文件</string>
             </property>
+            <property name="icon">
+             <iconset resource="Resources.qrc">
+              <normaloff>:/resource/img/img-grey/folder-close.png</normaloff>:/resource/img/img-grey/folder-close.png</iconset>
+            </property>
            </widget>
           </item>
           <item>
@@ -104,6 +108,10 @@
            <widget class="QPushButton" name="chatRecordBtn">
             <property name="text">
              <string>聊天记录</string>
+            </property>
+            <property name="icon">
+             <iconset resource="Resources.qrc">
+              <normaloff>:/resource/img/img-grey/history.png</normaloff>:/resource/img/img-grey/history.png</iconset>
             </property>
            </widget>
           </item>
@@ -148,6 +156,10 @@
             <property name="text">
              <string>发送</string>
             </property>
+            <property name="icon">
+             <iconset resource="Resources.qrc">
+              <normaloff>:/resource/img/img-grey/send.png</normaloff>:/resource/img/img-grey/send.png</iconset>
+            </property>
            </widget>
           </item>
          </layout>
@@ -163,7 +175,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>911</width>
+     <width>970</width>
      <height>26</height>
     </rect>
    </property>
@@ -177,6 +189,8 @@
    </property>
   </widget>
  </widget>
- <resources/>
+ <resources>
+  <include location="Resources.qrc"/>
+ </resources>
  <connections/>
 </ui>
