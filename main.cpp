@@ -12,6 +12,14 @@ int main(int argc, char *argv[])
         qApp->setStyleSheet(uiStyle.readAll());
         uiStyle.close();
     }
+    //TODO:后期考虑开放主题设置
+//     QFile uiStyle("./resource/Ubuntu.qss");
+//     if( uiStyle.open(QFile::ReadOnly))
+//         {
+//             qApp->setStyleSheet(uiStyle.readAll());
+//             uiStyle.close();
+//         }
+
     ChatWindow w;
     w.show();
     return a.exec();

@@ -1,5 +1,6 @@
 #include "ChatWindow.h"
 #include "ui_ChatWindow.h"
+#include "OptionDialog.h"
 #include <QDebug>
 #include <QGraphicsDropShadowEffect>
 
@@ -10,6 +11,7 @@ ChatWindow::ChatWindow(QWidget *parent)
     , ui(new Ui::ChatWindow)
 {
     ui->setupUi(this);
+
 //    // 1、设置无边框，背景透明
 //    this->setWindowFlags(Qt::FramelessWindowHint);
 //    this->setAttribute(Qt::WA_TranslucentBackground);
@@ -32,8 +34,25 @@ ChatWindow::~ChatWindow()
     delete ui;
 }
 
-
+//TODO:聊天气泡实现
 void ChatWindow::on_sendBtn_clicked()
 {
     cout<<"send button clicked!";
+
+    auto text = ui->plainTextEdit->toPlainText();
+    cout<<text;
+    ui->plainTextEdit->clear();
+    ui->textEdit->setTextBackgroundColor(QColor(158,234,106));
+//    ui->textEdit->setTextColor(QColor(Qt::green));
+    ui->textEdit->append(text.trimmed());
+
+}
+
+//TODO:弹出设置界面,后期考虑是否用label设置（信号与槽是否支持），实现图标靠左贴
+void ChatWindow::on_settingBtn_clicked()
+{
+    cout<<"setting dialog";
+    optionDialog = new OptionDialog(this);
+    optionDialog->show();
+    cout<<"enter";
 }
