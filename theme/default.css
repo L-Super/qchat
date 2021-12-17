@@ -1,0 +1,41 @@
+/* #FFFFFF可与标题栏颜色一致 */
+QMainWindow{ background-color: #fcfaff; border-radius: 2px; }
+
+QPushButton, QRadioButton,
+QLineEdit,  QTextEdit, QPlainTextEdit, 
+QComboBox, QSpinBox, QDoubleSpinBox,
+QTimeEdit, QDateEdit, QDateTimeEdit  
+{ 
+    border-style: none;
+    border: 1px solid #DCDFE6;
+    border-radius: 5px;
+    padding: 5px;
+    font-size: 15px; 
+}
+/* 鼠标悬浮在控件上 */
+QPushButton:hover, QRadioButton:hover
+QLineEdit:hover,
+QComboBox:hover, QSpinBox:hover, QDoubleSpinBox:hover,
+QTimeEdit:hover, QDateEdit:hover, QDateTimeEdit:hover  
+{ 
+    /* font-size: 14px; */
+    padding: 1px;
+    color: #ffffff; 
+    font-weight: bold; 
+    background-color: #334154; 
+}
+/* 鼠标按下 */
+QPushButton:pressed, QRadioButton:pressed, 
+QComboBox:pressed, QSpinBox:pressed, QDoubleSpinBox:pressed
+{ 
+    font-size: 14px;
+    color: #ffffff; 
+    font-weight: bold; 
+    background-color: #585a5e; 
+}
+
+QLabel
+{
+    font-size: 14px;
+    color: #3d4150; 
+}

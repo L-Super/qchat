@@ -1,4 +1,4 @@
-QT       += core gui
+QT       += core gui network
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -17,12 +17,15 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += \
     OptionDialog.cpp \
+    SocketFramework.cpp \
     main.cpp \
     ChatWindow.cpp
 
 HEADERS += \
     ChatWindow.h \
-    OptionDialog.h
+    OptionDialog.h \
+    SocketFramework.h \
+    about.h
 
 FORMS += \
     ChatWindow.ui \

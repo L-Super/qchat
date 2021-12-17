@@ -3,6 +3,7 @@
 #include "OptionDialog.h"
 #include <QDebug>
 #include <QGraphicsDropShadowEffect>
+#include <QTime>
 
 #define cout qDebug()<<"["<<__FILE__<<__func__<<__LINE__<<"]"
 
@@ -27,6 +28,7 @@ ChatWindow::ChatWindow(QWidget *parent)
 //    this->centralWidget()->setGraphicsEffect(shadowEffect);
 //    this->setGraphicsEffect(shadowEffect);
 
+    //TODO:左侧自己头像部分，考虑用label显示头像，并加上昵称
 }
 
 ChatWindow::~ChatWindow()
@@ -40,11 +42,20 @@ void ChatWindow::on_sendBtn_clicked()
     cout<<"send button clicked!";
 
     auto text = ui->plainTextEdit->toPlainText();
+    if(text.isEmpty())
+    {
+        cout<<"text is empty";
+        return;
+    }
     cout<<text;
     ui->plainTextEdit->clear();
-    ui->textEdit->setTextBackgroundColor(QColor(158,234,106));
+    ui->textBrowser->setTextBackgroundColor(QColor(158,234,106));
 //    ui->textEdit->setTextColor(QColor(Qt::green));
-    ui->textEdit->append(text.trimmed());
+
+    //TODO:后期可能会使用QTextCursor设置格式
+    ui->textBrowser->setAlignment(Qt::AlignRight);
+    ui->textBrowser->append(QTime::currentTime().toString());
+    ui->textBrowser->append(text.trimmed());
 
 }
 
@@ -54,5 +65,4 @@ void ChatWindow::on_settingBtn_clicked()
     cout<<"setting dialog";
     optionDialog = new OptionDialog(this);
     optionDialog->show();
-    cout<<"enter";
 }
