@@ -1,6 +1,7 @@
 #pragma once
+#include "version.h"
 #include <QString>
-//TODO:还不清楚这样是否规范
+//TODO:设置为单例
 class About
 {
 public:
@@ -18,6 +19,6 @@ private:
 About::About()
 {
     author = "Listening";
-    version = "1.0.0";
-    introduce = ("QChat is a local chat software");
+    version = FILE_VERSION_STR;
+    introduce = FILE_DESCRIPTION;
 }

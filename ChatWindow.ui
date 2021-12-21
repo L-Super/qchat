@@ -26,7 +26,7 @@
           </property>
           <property name="icon">
            <iconset resource="Resources.qrc">
-            <normaloff>:/resource/img/img-black/picture.png</normaloff>:/resource/img/img-black/picture.png</iconset>
+            <normaloff>:/resource/img/img-grey/head.png</normaloff>:/resource/img/img-grey/head.png</iconset>
           </property>
           <property name="autoDefault">
            <bool>false</bool>
@@ -73,7 +73,7 @@
           </property>
           <property name="icon">
            <iconset resource="Resources.qrc">
-            <normaloff>:/resource/img/img-black/setting.png</normaloff>:/resource/img/img-black/setting.png</iconset>
+            <normaloff>:/resource/img/img-grey/setting.png</normaloff>:/resource/img/img-grey/setting.png</iconset>
           </property>
           <property name="iconSize">
            <size>

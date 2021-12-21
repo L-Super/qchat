@@ -1,19 +1,6 @@
 <RCC>
     <qresource prefix="/">
         <file>resource/QssStyle.css</file>
-        <file>resource/img/img-black/close.png</file>
-        <file>resource/img/img-black/download.png</file>
-        <file>resource/img/img-black/error.png</file>
-        <file>resource/img/img-black/folder-close.png</file>
-        <file>resource/img/img-black/history.png</file>
-        <file>resource/img/img-black/picture.png</file>
-        <file>resource/img/img-black/play.png</file>
-        <file>resource/img/img-black/refresh.png</file>
-        <file>resource/img/img-black/save.png</file>
-        <file>resource/img/img-black/search.png</file>
-        <file>resource/img/img-black/send.png</file>
-        <file>resource/img/img-black/setting.png</file>
-        <file>resource/img/img-black/warning.png</file>
         <file>resource/img/img-grey/close.png</file>
         <file>resource/img/img-grey/download.png</file>
         <file>resource/img/img-grey/error.png</file>
@@ -27,5 +14,21 @@
         <file>resource/img/img-grey/send.png</file>
         <file>resource/img/img-grey/setting.png</file>
         <file>resource/img/img-grey/warning.png</file>
+        <file>resource/img/img-grey/head.png</file>
+        <file>resource/img/img-white/close.png</file>
+        <file>resource/img/img-white/download.png</file>
+        <file>resource/img/img-white/error.png</file>
+        <file>resource/img/img-white/folder-close.png</file>
+        <file>resource/img/img-white/head.png</file>
+        <file>resource/img/img-white/history.png</file>
+        <file>resource/img/img-white/picture.png</file>
+        <file>resource/img/img-white/play.png</file>
+        <file>resource/img/img-white/refresh.png</file>
+        <file>resource/img/img-white/save.png</file>
+        <file>resource/img/img-white/search.png</file>
+        <file>resource/img/img-white/send.png</file>
+        <file>resource/img/img-white/setting.png</file>
+        <file>resource/img/img-white/warning.png</file>
+        <file>resource/img/icon.ico</file>
     </qresource>
 </RCC>

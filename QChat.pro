@@ -25,7 +25,8 @@ HEADERS += \
     ChatWindow.h \
     OptionDialog.h \
     SocketFramework.h \
-    about.h
+    about.h \
+    version.h
 
 FORMS += \
     ChatWindow.ui \
@@ -38,4 +39,6 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 
 RESOURCES += \
     Resources.qrc
+
+RC_FILE += QChat_resource.rc
 

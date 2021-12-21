@@ -61,8 +61,6 @@ void OptionDialog::GetThemeFile()
         // 去掉.qss后缀,并存入themeList
         themeList << file.section(".",0,0);
     }
-    cout << themeList;
-
     ui->themeComboBox->addItems(themeList);
 }
 

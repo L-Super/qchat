@@ -4,6 +4,15 @@
 
 class QUdpSocket;
 
+// 区分不同的广播消息
+enum MsgType{
+    chatMsg,// 聊天信息
+    Online,//在线
+    Offline,//离线
+    FileName,//文件名
+    RefFile//拒收文件
+};
+
 //TODO:如何实现像qq或者微信一样发送消息
 class SocketFramework : public QObject
 {
