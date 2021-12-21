@@ -1,20 +1,45 @@
 #pragma once
 #include "version.h"
 #include <QString>
-//TODO:设置为单例
+//#include <mutex>
+
 class About
 {
 public:
-    About();
-    ~About() = default;
+    static About &GetInstance();
+
     QString GetAuthor() { return author; }
     QString GetVersion() { return version; }
     QString GetIntroduce() { return introduce; }
+
+    class DeleteClass // 类中套类，用来释放对象
+    {
+      public:
+        ~DeleteClass()
+        {
+            if(About::m_instance)
+            {
+                delete About::m_instance;
+                About::m_instance = nullptr;
+            }
+        }
+    };
+
+private:
+    About();
+    static About *m_instance; //静态成员变量
+//    static std::mutex mymutex;
+    static DeleteClass deleter;// 定义一个静态成员变量，程序结束时，系统会自动调用它的析构函数从而释放单例对象
+
 private:
     QString author;
     QString version;
     QString introduce;
 };
+
+About *About::m_instance = nullptr;
+About::DeleteClass deleter;
+
 
 About::About()
 {
@@ -22,3 +47,24 @@ About::About()
     version = FILE_VERSION_STR;
     introduce = FILE_DESCRIPTION;
 }
+
+//static Singleton* get_instance()
+//这样做并不好，无法避免用户使用delete instance导致对象被提前销毁。建议使用返回引用的方式。
+About &About::GetInstance()
+{
+//    if(m_instance == nullptr)
+//    {
+//        std::lock_guard<std::mutex> mylock(mymutex);
+//        if(m_instance == nullptr)
+//        {
+//            m_instance = new About();
+//        }
+//    }
+//    return m_instance;
+
+    // 《Effective C++》中简洁的singleton写法
+//    //C++11及以后的版本（如C++14）的多线程下，正确。
+    static About m_instance;
+    return m_instance;
+}
+

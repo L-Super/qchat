@@ -27,6 +27,8 @@ private slots:
 
     void on_settingBtn_clicked();
 
+    void on_fileBtn_clicked();
+
 private:
     Ui::ChatWindow *ui;
     OptionDialog* optionDialog;

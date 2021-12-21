@@ -66,7 +66,8 @@ void OptionDialog::GetThemeFile()
 
 void OptionDialog::AboutTabWidget()
 {
-    About about;
+    About& about = About::GetInstance();
+
     ui->authorLabel->setText(about.GetAuthor());
     ui->introduceLabel->setText(about.GetIntroduce());
     ui->versionLabel->setText(about.GetVersion());

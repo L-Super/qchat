@@ -4,6 +4,8 @@
 #include <QDebug>
 #include <QGraphicsDropShadowEffect>
 #include <QTime>
+#include <QFileDialog>
+#include <QStandardPaths>
 
 #define cout qDebug()<<"["<<__FILE__<<__func__<<__LINE__<<"]"
 
@@ -65,4 +67,13 @@ void ChatWindow::on_settingBtn_clicked()
     cout<<"setting dialog";
     optionDialog = new OptionDialog(this);
     optionDialog->show();
+}
+
+void ChatWindow::on_fileBtn_clicked()
+{
+    auto filename = QFileDialog::getOpenFileName(this,
+                       tr("选择发送的文件"),
+                       QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation),
+                       tr("所有文件(*.*)"));
+    cout<<filename;
 }
