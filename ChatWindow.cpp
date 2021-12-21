@@ -75,5 +75,6 @@ void ChatWindow::on_fileBtn_clicked()
                        tr("选择发送的文件"),
                        QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation),
                        tr("所有文件(*.*)"));
+
     cout<<filename;
 }
