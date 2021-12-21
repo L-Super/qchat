@@ -1,5 +1,6 @@
 /* #FFFFFF可与标题栏颜色一致 */
-QMainWindow{ background-color: #fcfaff; border-radius: 2px; }
+QMainWindow,QDialog
+{ background-color: #fcfaff; border-radius: 2px; }
 
 QPushButton, QRadioButton,
 QLineEdit,  QTextEdit, QPlainTextEdit, 
