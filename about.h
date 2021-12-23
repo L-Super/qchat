@@ -1,12 +1,21 @@
 #pragma once
 #include "version.h"
 #include <QString>
-//#include <mutex>
 
+#if __cplusplus >= 201103L
+#include <mutex>
+class About
+{
+
+public:
+    static About &GetInstance();
+#else
+std::mutex mymutex;
 class About
 {
 public:
-    static About &GetInstance();
+    static About *GetInstance();
+#endif
 
     QString GetAuthor() { return author; }
     QString GetVersion() { return version; }
@@ -28,7 +37,6 @@ public:
 private:
     About();
     static About *m_instance; //静态成员变量
-//    static std::mutex mymutex;
     static DeleteClass deleter;// 定义一个静态成员变量，程序结束时，系统会自动调用它的析构函数从而释放单例对象
 
 private:
@@ -40,7 +48,6 @@ private:
 About *About::m_instance = nullptr;
 About::DeleteClass deleter;
 
-
 About::About()
 {
     author = "Listening";
@@ -48,23 +55,28 @@ About::About()
     introduce = FILE_DESCRIPTION;
 }
 
+#if __cplusplus >= 201103L
 //static Singleton* get_instance()
 //这样做并不好，无法避免用户使用delete instance导致对象被提前销毁。建议使用返回引用的方式。
 About &About::GetInstance()
 {
-//    if(m_instance == nullptr)
-//    {
-//        std::lock_guard<std::mutex> mylock(mymutex);
-//        if(m_instance == nullptr)
-//        {
-//            m_instance = new About();
-//        }
-//    }
-//    return m_instance;
-
     // 《Effective C++》中简洁的singleton写法
 //    //C++11及以后的版本（如C++14）的多线程下，正确。
     static About m_instance;
     return m_instance;
 }
-
+#else
+// 传统经典方式
+About *About::GetInstance()
+{
+    if(m_instance == nullptr)
+    {
+        std::lock_guard<std::mutex> mylock(mymutex);
+        if(m_instance == nullptr)
+        {
+            m_instance = new About();
+        }
+    }
+    return m_instance;
+}
+#endif

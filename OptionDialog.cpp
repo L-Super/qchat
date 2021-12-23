@@ -13,6 +13,7 @@ OptionDialog::OptionDialog(QWidget *parent) :
 {
     ui->setupUi(this);
     setWindowTitle(tr("设置"));
+    // 去掉对话框的问号按钮
     // 此方法会导致打不开QDialog
 //    setWindowFlags(Qt::CustomizeWindowHint | Qt::WindowCloseButtonHint);
     setWindowFlags(Qt::Dialog | Qt::WindowCloseButtonHint);
@@ -71,5 +72,8 @@ void OptionDialog::AboutTabWidget()
     ui->authorLabel->setText(about.GetAuthor());
     ui->introduceLabel->setText(about.GetIntroduce());
     ui->versionLabel->setText(about.GetVersion());
+
+    // 设置默认打开页
+    ui->tabWidget->setCurrentIndex(0);
 }
 
