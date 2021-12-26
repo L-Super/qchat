@@ -3,10 +3,11 @@
 #include <QObject>
 
 class QUdpSocket;
+class QHostAddress;
 
 // 区分不同的广播消息
 enum MsgType{
-    chatMsg,// 聊天信息
+    ChatMsg,// 聊天信息
     Online,//在线
     Offline,//离线
     FileName,//文件名
@@ -19,12 +20,21 @@ class SocketFramework : public QObject
     Q_OBJECT
 public:
     explicit SocketFramework(QObject *parent = nullptr);
-    QString ReceiveData();
-    void SendData(const QString& ip, const QString& iport, const QString& text);
+    void ReceiveData();
+    void SendData(MsgType msgType, QString myselfName = "", QString friendIP = "", QString msg = "");
+
+    QString GetLocalIP();
 
 signals:
+    // 接收发送的信息。发送者，发送的信息
+    void ReceiveMsgSignal(QString senderName, QString sentMsg);
+    void NewUserOnlineSignal(const QString& newUser,const QString& ip);
+    void UserOfflineSignal(const QString& user,const QString& ip);
 
 private:
     QUdpSocket* udpSocket;
+    qint16 port;
+    QString myname = "";//本端用户名
+    QString fileName; // 文件名
 };
 
