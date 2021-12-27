@@ -20,6 +20,8 @@ public:
     ChatWindow(QWidget *parent = nullptr);
     ~ChatWindow();
 
+    // 从配置文件读取账号昵称等信息
+    QString ReadInfoFromIni();
     // 展示对方发来的消息
     void ShowSentData(const QString& senderName, const QString& sentMsg);
     void NewUserOnline(const QString& newUser,const QString& ip);

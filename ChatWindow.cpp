@@ -8,6 +8,7 @@
 #include <QDateTime>
 #include <QFileDialog>
 #include <QStandardPaths>
+#include <QSettings>
 #include <mutex>
 
 #define cout qDebug()<<"["<<__FILE__<<__func__<<__LINE__<<"]"
@@ -39,12 +40,13 @@ ChatWindow::ChatWindow(QWidget *parent)
     QListWidgetItem *userItem = new QListWidgetItem("user");
     ui->listWidget->addItem(userItem);
     ui->listWidget->setCurrentItem(userItem);
-    connect(ui->listWidget,&QListWidget::itemClicked,this,&ChatWindow::SelectedFriend);
+    // itemSelectionChanged itemClicked 效果一致
+    connect(ui->listWidget,&QListWidget::itemSelectionChanged,this,&ChatWindow::SelectedFriend);
 
     connect(socketer,&SocketFramework::ReceiveMsgSignal,this,&ChatWindow::ShowSentData);
     connect(socketer,&SocketFramework::NewUserOnlineSignal,this,&ChatWindow::NewUserOnline);
     //TODO:左侧自己头像部分，考虑用label显示头像，并加上昵称
-    mName = "Listening";
+    mName = ReadInfoFromIni();
     ui->headLabel->setText(mName);
     socketer->SendData(Online, mName);
 }
@@ -52,6 +54,29 @@ ChatWindow::ChatWindow(QWidget *parent)
 ChatWindow::~ChatWindow()
 {
     delete ui;
+}
+
+// 从配置文件读取账号昵称等信息
+QString ChatWindow::ReadInfoFromIni()
+{
+    QString path = QCoreApplication::applicationDirPath() + "/userinfo.ini";
+
+    QFile iniFile(path);
+    if (!iniFile.exists())
+    {
+        //写入ini配置文件
+        QSettings settings("userinfo.ini", QSettings::IniFormat);
+        settings.beginGroup("DefaultUser");
+        settings.setValue("user", "Listening");
+        settings.endGroup();
+        settings.beginGroup("TestIP");
+        settings.setValue("IP1", "192.168.136.78");
+        settings.endGroup();
+    }
+
+    //读取ini
+    QSettings readIni("userinfo.ini", QSettings::IniFormat);
+    return readIni.value("DefaultUser/user").toString();
 }
 
 // 接收对方发送的信息
@@ -68,8 +93,8 @@ void ChatWindow::ShowSentData(const QString &senderName, const QString &sentMsg)
     ui->textBrowser->setAlignment(Qt::AlignLeft);
     ui->textBrowser->setTextBackgroundColor(QColor(1, 0, 0, 0));
     cout<<"receive msg"<<curTime<<sentMsg;
-    ui->textBrowser->append(curTime);
-    ui->textBrowser->append(sentMsg);
+    ui->textBrowser->append(curTime + "\n" + sentMsg);
+//    ui->textBrowser->append(sentMsg);
 }
 
 // 好友上线
@@ -115,6 +140,7 @@ QString ChatWindow::SelectedFriend()
     auto selectItemList = ui->listWidget->selectedItems();
     auto selectFriend = selectItemList.at(0)->text();
     ui->friendNameLabel->setText(selectFriend);
+    ui->friendNameStatusLabel->setText(GetSelectFriendIP());
     return selectFriend;
 }
 
@@ -122,7 +148,9 @@ QString ChatWindow::SelectedFriend()
 QString ChatWindow::GetSelectFriendIP()
 {
     //测试用
-    QString friendIP = "127.0.0.1";
+//    QString friendIP = "192.168.136.78";
+    QSettings readIni("userinfo.ini", QSettings::IniFormat);
+    QString friendIP = readIni.value("TestIP/IP1").toString();
 
 //    auto selectItemList = ui->listWidget->selectedItems();
     auto selectItemList = ui->listWidget->currentItem();
@@ -133,6 +161,7 @@ QString ChatWindow::GetSelectFriendIP()
     if(findResult != friendList.end())
     {
         friendIP = findResult->second;
+        cout<<"friendIP" <<friendIP;
     }
     return friendIP;
 }
@@ -170,6 +199,7 @@ void ChatWindow::on_sendBtn_clicked()
     cout<<"send text" << text;
 
     auto friendIP = GetSelectFriendIP();
+    // text.toHtmlEscaped()测试发现无区别，暂不确定需不需要
     socketer->SendData(ChatMsg, mName, friendIP, text);
 }
 

@@ -1,6 +1,7 @@
 #pragma once
 
 #include <QObject>
+//#include "include/spdlog/spdlog.h"
 
 class QUdpSocket;
 class QHostAddress;
@@ -36,5 +37,6 @@ private:
     qint16 port;
     QString myname = "";//本端用户名
     QString fileName; // 文件名
+//    std::shared_ptr<spdlog::logger> logger;
 };
 

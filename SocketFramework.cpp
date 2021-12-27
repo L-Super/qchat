@@ -4,8 +4,14 @@
 #include <QDateTime>
 #include <QNetworkInterface>
 #include <QHostInfo>
+#include <QNetworkDatagram>
+
+//#include "spdlog/sinks/basic_file_sink.h" // support for basic file logging
+//#include "spdlog/sinks/rotating_file_sink.h" // support for rotating file logging
 
 #define cout qDebug()<<"["<<__FILE__<<__func__<<__LINE__<<"]"
+
+//using namespace spdlog;
 
 SocketFramework::SocketFramework(QObject *parent) : QObject(parent),
     udpSocket(new QUdpSocket(this))
@@ -13,24 +19,33 @@ SocketFramework::SocketFramework(QObject *parent) : QObject(parent),
 //    myfsrv = new FileSrvDlg(this);
 //    connect(myfsrv, SIGNAL(sendFileName(QString)), this, SLOT(getSfileName(QString)));
     // ShareAddress 允许其他的服务（进程）去绑定这个IP和端口
-    // ReuseAddressHint 为失败后立即使用他与SO_REUSEADDR通知内核，如果端口忙，但TCP状态位于TIME_WAIT，可以重用端口。
-    //  如果端口忙，而TCP状态位于其他状态，重用端口时依旧得到一个错误信息，指明"地址已经使用中"。
-    //  如果你的服务程序停止后想立即重启，而新套接字依旧使用同一端口，此时SO_REUSEADDR 选项非常有用。
+    // ReuseAddressHint 尝试重新绑定服务
     port = 13140;
     udpSocket->bind(port, QUdpSocket::ShareAddress|QUdpSocket::ReuseAddressHint);
 
+//    // 使用spdlog写循环日志
+//    logger = spdlog::rotating_logger_mt("SocketFramework", "myfilename.txt", 1024 * 1024 * 5, 3);
+//    QString str={"中文"};
+//    logger->info(str.toStdString());
+
+//    auto my_logger = spdlog::basic_logger_mt("basic_logger", "basic.txt");
+//    my_logger->info(str.toUtf8());
     connect(udpSocket, &QUdpSocket::readyRead, this, &SocketFramework::ReceiveData);
 }
 
 //读取对方发送的内容
 void SocketFramework::ReceiveData()
 {
+    QHostAddress originAddr; // 对方ip
+    quint16 originPort;   // 对方发送的端口号
     while (udpSocket->hasPendingDatagrams())
     {
         QByteArray qba;
         // 通过pendingDatagramSize() 获取当前可供读取的 UDP 数据报大小，并据此分配缓冲区qba
         qba.resize(udpSocket->pendingDatagramSize());
-        udpSocket->readDatagram(qba.data(), qba.size());
+        udpSocket->readDatagram(qba.data(), qba.size(), &originAddr, &originPort);
+        cout << originAddr.toString();
+//        QNetworkDatagram datagram = udpSocket->receiveDatagram();
 
         QDataStream readData(&qba, QIODevice::ReadOnly);
         int msgType;
@@ -52,6 +67,7 @@ void SocketFramework::ReceiveData()
         // 新用户上线，获取用户名和 IP，使用 onLine() 函数进行新用户登录的处理。
         case Online:
             readData >> senderName >> hostIp;
+            cout<<"new user online"<<senderName<<hostIp;
             emit NewUserOnlineSignal(senderName, hostIp);
             break;
         // 用户离线，获取用户名，然后使用 offLine() 函数进行处理
@@ -76,31 +92,35 @@ void SocketFramework::SendData(MsgType msgType, QString name, QString friendIP, 
     myname = name;
     QByteArray byteData;
     QDataStream sendDataStream(&byteData, QIODevice::WriteOnly);
-    QString locHostIp = GetLocalIP();
+    QString localHostIp = GetLocalIP();
 
     QHostAddress originIP(friendIP);
     // 要发送的数据中写入消息类型 msgType 、用户名
     sendDataStream << msgType << myname;
     // 再写入其他信息
+//    // 广播write发送数据应该绑定ip，否则多网卡发送不正确.目前测试未解决问题
+//    udpSocket->bind(QHostAddress::LocalHost,port,QUdpSocket::ShareAddress);
     switch (msgType)
     {
     case ChatMsg:
-        sendDataStream << chatMsg << locHostIp;
+        sendDataStream << chatMsg << localHostIp;
         udpSocket->writeDatagram(byteData, byteData.length(), originIP, port);
+        cout<<"ChatMsg"<<chatMsg<<originIP;
         break;
     case Online:
-        sendDataStream << locHostIp;
+        sendDataStream << localHostIp;
         udpSocket->writeDatagram(byteData, byteData.length(), QHostAddress::Broadcast, port);
+        cout<<"Online";
         break;
     case Offline:
-        sendDataStream << locHostIp;
+        sendDataStream << localHostIp;
         udpSocket->writeDatagram(byteData, byteData.length(), QHostAddress::Broadcast, port);
         break;
     case FileName:
-        sendDataStream << locHostIp << name << FileName;
+        sendDataStream << localHostIp << name << FileName;
         break;
     case RefFile:
-        sendDataStream << locHostIp << name;
+        sendDataStream << localHostIp << name;
         break;
     }
     //TODO:确认是广播出去？
