@@ -3,6 +3,7 @@
 #include "about.h"
 #include <QHostInfo>
 #include <QFileInfo>
+#include <QSettings>
 #include <QDir>
 
 #define cout qDebug()<<"["<<__FILE__<<__func__<<__LINE__<<"]"
@@ -20,6 +21,8 @@ OptionDialog::OptionDialog(QWidget *parent) :
 
     ui->themeComboBox->addItem("default");
 
+    // 获取昵称
+    ui->userNameLineEdit->setText(GetUserName());
     GetThemeFile();
     LocalAddress();
     AboutTabWidget();
@@ -27,7 +30,38 @@ OptionDialog::OptionDialog(QWidget *parent) :
 
 OptionDialog::~OptionDialog()
 {
+    cout <<"析构";
     delete ui;
+}
+
+QString OptionDialog::GetUserName()
+{
+    userIniPath = QCoreApplication::applicationDirPath() + "/userinfo.ini";
+
+    QFile iniFile(userIniPath);
+    if (!iniFile.exists())
+    {
+        cout<< "user ini file not exist,read failed";
+    }
+
+    //读取ini
+    QSettings readIni(userIniPath, QSettings::IniFormat);
+    QString userName = readIni.value("DefaultUser/user").toString();
+    cout << userName;
+    return userName;
+}
+
+void OptionDialog::SetUserName()
+{
+
+    QFile iniFile(userIniPath);
+
+    auto setUserName = ui->userNameLineEdit->text();
+
+    QSettings ini(userIniPath, QSettings::IniFormat);
+    ini.beginGroup("DefaultUser");
+    ini.setValue("user", setUserName);
+    ini.endGroup();
 }
 
 void OptionDialog::LocalAddress()
@@ -65,6 +99,22 @@ void OptionDialog::GetThemeFile()
     ui->themeComboBox->addItems(themeList);
 }
 
+//TODO:主题设置失败
+void OptionDialog::SetTheme()
+{
+    QString selectThemeName = ui->themeComboBox->currentText();
+    selectThemeName.append(".css");
+    cout<<selectThemeName;
+
+    QFile style("./theme/" + selectThemeName);
+    if( style.open(QFile::ReadOnly))
+    {
+        cout<<"open success";
+        qApp->setStyleSheet(style.readAll());
+        style.close();
+    }
+}
+
 void OptionDialog::AboutTabWidget()
 {
     About& about = About::GetInstance();
@@ -77,3 +127,19 @@ void OptionDialog::AboutTabWidget()
     ui->tabWidget->setCurrentIndex(0);
 }
 
+//TODO：按下按钮后，按钮高度会变化，待修复
+//TODO:由于ChatWindow初始化时，就new OptionDialog，导致配置文件外部修改时，无法及时更新显示。
+//      但不初始化时new，connect()就会失败
+void OptionDialog::on_confirmPushButton_clicked()
+{
+    SetUserName();
+    SetTheme();
+    emit UserNameRefresh();
+}
+
+
+void OptionDialog::closeEvent(QCloseEvent *event)
+{
+//    emit UserNameRefresh();
+//    this->deleteLater();
+}

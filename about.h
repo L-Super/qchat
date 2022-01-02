@@ -60,8 +60,9 @@ About::About()
 //这样做并不好，无法避免用户使用delete instance导致对象被提前销毁。建议使用返回引用的方式。
 About &About::GetInstance()
 {
-    // 《Effective C++》中简洁的singleton写法
-//    //C++11及以后的版本（如C++14）的多线程下，正确。
+    // 《Effective C++》中简洁的singleton写法 Meyers' Singleton
+    // C++11及以后的版本（如C++14）的多线程下，正确。
+    // 因为C++11以后,规定了local static在多线程条件下的初始化行为，要求编译器保证了内部静态变量的线程安全性
     static About m_instance;
     return m_instance;
 }

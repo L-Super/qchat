@@ -34,7 +34,7 @@
           </widget>
          </item>
          <item>
-          <widget class="QLineEdit" name="lineEdit"/>
+          <widget class="QLineEdit" name="userNameLineEdit"/>
          </item>
         </layout>
        </item>
@@ -53,7 +53,7 @@
         </layout>
        </item>
        <item>
-        <widget class="QPushButton" name="pushButton">
+        <widget class="QPushButton" name="confirmPushButton">
          <property name="text">
           <string>确定</string>
          </property>

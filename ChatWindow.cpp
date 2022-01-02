@@ -20,7 +20,6 @@ ChatWindow::ChatWindow(QWidget *parent)
 {
     ui->setupUi(this);
 
-
 //    // 1、设置无边框，背景透明
 //    this->setWindowFlags(Qt::FramelessWindowHint);
 //    this->setAttribute(Qt::WA_TranslucentBackground);
@@ -40,15 +39,24 @@ ChatWindow::ChatWindow(QWidget *parent)
     QListWidgetItem *userItem = new QListWidgetItem("user");
     ui->listWidget->addItem(userItem);
     ui->listWidget->setCurrentItem(userItem);
-    // itemSelectionChanged itemClicked 效果一致
-    connect(ui->listWidget,&QListWidget::itemSelectionChanged,this,&ChatWindow::SelectedFriend);
 
-    connect(socketer,&SocketFramework::ReceiveMsgSignal,this,&ChatWindow::ShowSentData);
-    connect(socketer,&SocketFramework::NewUserOnlineSignal,this,&ChatWindow::NewUserOnline);
+
     //TODO:左侧自己头像部分，考虑用label显示头像，并加上昵称
     mName = ReadInfoFromIni();
     ui->headLabel->setText(mName);
     socketer->SendData(Online, mName);
+
+    // itemSelectionChanged itemClicked 效果一致
+    connect(ui->listWidget,&QListWidget::itemSelectionChanged,this,&ChatWindow::SelectedFriend);
+
+    connect(socketer, &SocketFramework::ReceiveMsgSignal, this, &ChatWindow::ShowSentData);
+    connect(socketer, &SocketFramework::NewUserOnlineSignal, this, &ChatWindow::NewUserOnline);
+
+    optionDialog = new OptionDialog(this);
+    connect(optionDialog, &OptionDialog::UserNameRefresh, this, [&]{
+        mName = ReadInfoFromIni();
+        ui->headLabel->setText(mName);
+    });
 }
 
 ChatWindow::~ChatWindow()
@@ -59,13 +67,13 @@ ChatWindow::~ChatWindow()
 // 从配置文件读取账号昵称等信息
 QString ChatWindow::ReadInfoFromIni()
 {
-    QString path = QCoreApplication::applicationDirPath() + "/userinfo.ini";
-
-    QFile iniFile(path);
+    QString iniPath = QCoreApplication::applicationDirPath() + "/userinfo.ini";
+    QFile iniFile(iniPath);
     if (!iniFile.exists())
     {
+        cout<<"ini file not exist,so create it";
         //写入ini配置文件
-        QSettings settings("userinfo.ini", QSettings::IniFormat);
+        QSettings settings(iniPath, QSettings::IniFormat);
         settings.beginGroup("DefaultUser");
         settings.setValue("user", "Listening");
         settings.endGroup();
@@ -75,7 +83,7 @@ QString ChatWindow::ReadInfoFromIni()
     }
 
     //读取ini
-    QSettings readIni("userinfo.ini", QSettings::IniFormat);
+    QSettings readIni(iniPath, QSettings::IniFormat);
     return readIni.value("DefaultUser/user").toString();
 }
 
@@ -110,6 +118,7 @@ void ChatWindow::NewUserOnline(const QString &newUser, const QString &ip)
 // 好友离线
 void ChatWindow::UserOffline(const QString &user, const QString &ip)
 {
+    cout<<user<<ip;
     auto foundUser = ui->listWidget->findItems(user,Qt::MatchExactly).first();
     ui->listWidget->removeItemWidget(foundUser);
     friendList.erase(user);
@@ -207,7 +216,8 @@ void ChatWindow::on_sendBtn_clicked()
 void ChatWindow::on_settingBtn_clicked()
 {
     cout<<"setting dialog";
-    optionDialog = new OptionDialog(this);
+
+//    optionDialog = new OptionDialog(this);
     optionDialog->show();
 }
 

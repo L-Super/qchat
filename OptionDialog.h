@@ -14,6 +14,9 @@ class OptionDialog : public QDialog
 public:
     explicit OptionDialog(QWidget *parent = nullptr);
     ~OptionDialog();
+    // 设置昵称
+    QString GetUserName();
+    void SetUserName();
     void LocalAddress();
     // 获取主题及主题设置
     void GetThemeFile();
@@ -21,8 +24,18 @@ public:
 
     void AboutTabWidget();
 
+private slots:
+    void on_confirmPushButton_clicked();
+
+protected:
+    void closeEvent(QCloseEvent *event);
+
+signals:
+    void UserNameRefresh();
+
 private:
     Ui::OptionDialog *ui;
+    QString userIniPath;
 };
 
 //TODO:后期再考虑tabwidget方向问题
