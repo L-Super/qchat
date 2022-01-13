@@ -30,8 +30,25 @@ OptionDialog::OptionDialog(QWidget *parent) :
 
 OptionDialog::~OptionDialog()
 {
-    cout <<"析构";
     delete ui;
+}
+
+OptionDialog* OptionDialog::mInstance = nullptr;
+OptionDialog::Deletor deletor;
+// 1.要么是全局变量。2.要么static mutex,同时需要声明
+//std::mutex myMutex;//
+std::mutex OptionDialog::myMutex;
+OptionDialog *OptionDialog::GetInstance()
+{
+    if(mInstance == nullptr)
+    {
+        std::lock_guard<std::mutex> lock(myMutex);
+        if(mInstance == nullptr)
+        {
+            mInstance = new OptionDialog();
+        }
+    }
+    return mInstance;
 }
 
 QString OptionDialog::GetUserName()
@@ -128,8 +145,7 @@ void OptionDialog::AboutTabWidget()
 }
 
 //TODO：按下按钮后，按钮高度会变化，待修复
-//TODO:由于ChatWindow初始化时，就new OptionDialog，导致配置文件外部修改时，无法及时更新显示。
-//      但不初始化时new，connect()就会失败
+
 void OptionDialog::on_confirmPushButton_clicked()
 {
     SetUserName();

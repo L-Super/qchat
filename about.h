@@ -3,13 +3,14 @@
 #include <QString>
 
 #if __cplusplus >= 201103L
-#include <mutex>
+
 class About
 {
 
 public:
     static About &GetInstance();
 #else
+#include <mutex>
 std::mutex mymutex;
 class About
 {

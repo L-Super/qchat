@@ -9,7 +9,8 @@
 #include <QFileDialog>
 #include <QStandardPaths>
 #include <QSettings>
-#include <mutex>
+
+//#include "hv/hv.h"
 
 #define cout qDebug()<<"["<<__FILE__<<__func__<<__LINE__<<"]"
 
@@ -47,16 +48,15 @@ ChatWindow::ChatWindow(QWidget *parent)
     socketer->SendData(Online, mName);
 
     // itemSelectionChanged itemClicked 效果一致
-    connect(ui->listWidget,&QListWidget::itemSelectionChanged,this,&ChatWindow::SelectedFriend);
+    connect(ui->listWidget, &QListWidget::itemClicked, this, &ChatWindow::SelectedFriend);
 
     connect(socketer, &SocketFramework::ReceiveMsgSignal, this, &ChatWindow::ShowSentData);
     connect(socketer, &SocketFramework::NewUserOnlineSignal, this, &ChatWindow::NewUserOnline);
 
-    optionDialog = new OptionDialog(this);
-    connect(optionDialog, &OptionDialog::UserNameRefresh, this, [&]{
-        mName = ReadInfoFromIni();
-        ui->headLabel->setText(mName);
-    });
+//    // 获取hv编译版本
+//    const char* version = hv_compile_version();
+//    // 写日志
+//    LOGI("libhv version: %s", version);
 }
 
 ChatWindow::~ChatWindow()
@@ -218,7 +218,13 @@ void ChatWindow::on_settingBtn_clicked()
     cout<<"setting dialog";
 
 //    optionDialog = new OptionDialog(this);
+    optionDialog = OptionDialog::GetInstance();
     optionDialog->show();
+
+    connect(optionDialog, &OptionDialog::UserNameRefresh, this, [&]{
+        mName = ReadInfoFromIni();
+        ui->headLabel->setText(mName);
+    });
 }
 
 void ChatWindow::on_fileBtn_clicked()
