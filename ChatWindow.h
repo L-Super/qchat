@@ -11,6 +11,17 @@ QT_END_NAMESPACE
 class QDateTime;
 class OptionDialog;
 class SocketFramework;
+class QUdpSocket;
+class QHostAddress;
+
+// 区分不同的广播消息
+enum MsgType{
+    ChatMsg,// 聊天信息
+    Online,//在线
+    Offline,//离线
+    FileName,//文件名
+    RefFile//拒收文件
+};
 
 class ChatWindow : public QMainWindow
 {
@@ -22,8 +33,13 @@ public:
 
     // 从配置文件读取账号昵称等信息
     QString ReadInfoFromIni();
+
+    void ReceiveData();
+    void SendData(MsgType msgType, QString friendIP = "", QString msg = "");
+    QString GetLocalIP();
+
     // 展示对方发来的消息
-    void ShowSentData(const QString& senderName, const QString& sentMsg);
+    void ShowReceiveData(const QString& senderName, const QString& sentMsg);
     void NewUserOnline(const QString& newUser,const QString& ip);
     void UserOffline(const QString& user,const QString& ip);
 
@@ -49,7 +65,8 @@ private slots:
 private:
     Ui::ChatWindow *ui;
     OptionDialog* optionDialog;
-    SocketFramework* socketer;
     QString mName;// 自己的昵称
     std::map<QString,QString> friendList;//map<user,ip>
+    QUdpSocket* udpSocket;
+    qint16 port;
 };

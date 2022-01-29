@@ -1,3 +1,4 @@
+# 此分支将socket合并到ChatWindow里，进行重构
 QT       += core gui network
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
@@ -17,23 +18,18 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += \
     OptionDialog.cpp \
-    SocketFramework.cpp \
     main.cpp \
     ChatWindow.cpp
 
 HEADERS += \
     ChatWindow.h \
     OptionDialog.h \
-    SocketFramework.h \
     about.h \
     version.h
 
 FORMS += \
     ChatWindow.ui \
     OptionDialog.ui
-
-# 包含spdlog
-#INCLUDEPATH += $$PWD/include
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
