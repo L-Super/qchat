@@ -116,11 +116,10 @@ void OptionDialog::GetThemeFile()
     ui->themeComboBox->addItems(themeList);
 }
 
-//TODO:主题设置失败
 void OptionDialog::SetTheme()
 {
     QString selectThemeName = ui->themeComboBox->currentText();
-    selectThemeName.append(".css");
+    selectThemeName.append(".qss");
     cout<<selectThemeName;
 
     QFile style("./theme/" + selectThemeName);
